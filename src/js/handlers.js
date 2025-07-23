@@ -55,6 +55,11 @@ export async function onFormSubmit(event) {
     //Checking if we still have search results to decide wheter to show the "load more" button
     if (page > 1 && page !== totalPages) {
       showLoadMoreButton();
+    } else if (page === totalPages) {
+      iziToast.info({
+        message: "We're sorry, but you've reached the end of search results.",
+        position: 'bottomRight',
+      });
     }
   } catch (error) {
     hideLoader();
