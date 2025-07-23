@@ -1,6 +1,8 @@
 import { refs } from './js/refs';
-import { onFormSubmit } from './js/handlers';
-import { hideLoader } from './js/render-functions';
+import { onFormSubmit, onLoadMoreBtnClick } from './js/handlers';
+import { hideLoader, hideLoadMoreButton } from './js/render-functions';
 
 hideLoader();
+hideLoadMoreButton();
 refs.formEl.addEventListener('submit', onFormSubmit);
+refs.loadMoreBtnEl.addEventListener('click', onLoadMoreBtnClick);
