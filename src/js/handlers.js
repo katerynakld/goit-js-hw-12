@@ -19,7 +19,6 @@ let totalPages;
 export async function onFormSubmit(event) {
   event.preventDefault();
 
-  showLoader();
   clearGallery();
   hideLoadMoreButton();
   page = 1;
@@ -34,6 +33,7 @@ export async function onFormSubmit(event) {
 
   try {
     currentUserInput = userInput;
+    showLoader();
     const data = await getImageByQuery(userInput, page);
 
     if (data.hits.length === 0) {
