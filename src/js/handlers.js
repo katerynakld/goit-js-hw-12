@@ -60,6 +60,7 @@ export async function onFormSubmit(event) {
     }
   } catch (error) {
     hideLoader();
+    hideLoadMoreButton();
     displayError(error.message);
   }
 }
