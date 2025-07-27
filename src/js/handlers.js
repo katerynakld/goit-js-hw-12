@@ -73,7 +73,6 @@ export async function onLoadMoreBtnClick() {
 
   try {
     const data = await getImageByQuery(currentUserInput, page);
-    refs.loadMoreBtnEl.insertAdjacentElement('afterend', refs.loaderEl);
     createGallery(data.hits);
     window.scrollBy({
       top: galleryItemSize.height * 2,
