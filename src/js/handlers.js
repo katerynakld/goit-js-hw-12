@@ -19,47 +19,43 @@ let totalPages;
 export async function onFormSubmit(event) {
   event.preventDefault();
 
-  //Resetting
+  showLoader();
   clearGallery();
   hideLoadMoreButton();
-  showLoader();
   page = 1;
   currentUserInput = '';
 
-  //Getting the hold of user input
   const userInput = event.target.elements[0].value.trim();
 
-  //Checking if user input is valid
-  if (!userInput) {
+  if (userInput === '') {
     displayError('Please, write something');
-    hideLoader();
     return;
   }
 
-  //Fetching data from API
   try {
     currentUserInput = userInput;
     const data = await getImageByQuery(userInput, page);
 
-    //This part is needed cause otherwise the empty search is not recognised as an error
-    if (!data.hits || data.hits.length === 0) {
-      throw new Error('No images found');
+    if (data.hits.length === 0) {
+      displayError(
+        'Sorry, there are no images matching your search query. Please try again'
+      );
+      hideLoadMoreButton();
     }
 
     totalPages = Math.ceil(data.totalHits / 15); //Calculating total pages for this search
-    showLoader();
     createGallery(data.hits);
     hideLoader();
-    page += 1;
 
     //Checking if we still have search results to decide wheter to show the "load more" button
-    if (page > 1 && page !== totalPages) {
+    if (page !== totalPages) {
       showLoadMoreButton();
     } else if (page === totalPages) {
       iziToast.info({
         message: "We're sorry, but you've reached the end of search results.",
         position: 'bottomRight',
       });
+      hideLoadMoreButton();
     }
   } catch (error) {
     hideLoader();
@@ -68,36 +64,36 @@ export async function onFormSubmit(event) {
 }
 
 export async function onLoadMoreBtnClick() {
-  showLoader();
+  page += 1;
   let galleryItemSize =
     refs.galleryEl.firstElementChild.getBoundingClientRect();
+
+  showLoader();
+  hideLoadMoreButton();
 
   try {
     const data = await getImageByQuery(currentUserInput, page);
     refs.loadMoreBtnEl.insertAdjacentElement('afterend', refs.loaderEl);
     createGallery(data.hits);
-
     window.scrollBy({
       top: galleryItemSize.height * 2,
       behavior: 'smooth',
     });
 
-    hideLoader();
-    page += 1;
+    totalPages = Math.ceil(data.totalHits / 15);
     // To finish the fetching process if we maxed out the number of pages
-    if (page >= totalPages) {
-      hideLoader();
-      hideLoadMoreButton();
+    if (page !== totalPages) {
+      showLoadMoreButton();
+    } else if (page === totalPages) {
       iziToast.info({
         message: "We're sorry, but you've reached the end of search results.",
         position: 'bottomRight',
       });
+      hideLoadMoreButton();
     }
 
-    //This part is needed cause otherwise the empty search result is not recognised as an error
-    if (!data.hits || data.hits.length === 0) {
-      throw new Error('No images found');
-    }
+    hideLoader();
+    showLoadMoreButton();
   } catch (error) {
     hideLoader();
     displayError(error.message);

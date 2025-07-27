@@ -70,9 +70,7 @@ export function clearGallery() {
 }
 
 export function showLoader() {
-  if (refs.loaderEl.classList.contains('visually-hidden')) {
-    refs.loaderEl.classList.remove('visually-hidden');
-  }
+  refs.loaderEl.classList.remove('visually-hidden');
 }
 
 export function hideLoader() {
@@ -82,9 +80,7 @@ export function hideLoader() {
 }
 
 export function showLoadMoreButton() {
-  if (refs.loadMoreBtnEl.classList.contains('visually-hidden')) {
-    refs.loadMoreBtnEl.classList.remove('visually-hidden');
-  }
+  refs.loadMoreBtnEl.classList.remove('visually-hidden');
 }
 
 export function hideLoadMoreButton() {
