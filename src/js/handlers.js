@@ -45,11 +45,10 @@ export async function onFormSubmit(event) {
       return;
     }
 
-    totalPages = Math.ceil(data.totalHits / 15); //Calculating total pages for this search
+    totalPages = Math.ceil(data.totalHits / 15);
     createGallery(data.hits);
     hideLoader();
 
-    //Checking if we still have search results to decide wheter to show the "load more" button
     if (page !== totalPages) {
       showLoadMoreButton();
     } else if (page === totalPages) {
@@ -82,7 +81,7 @@ export async function onLoadMoreBtnClick() {
     });
 
     totalPages = Math.ceil(data.totalHits / 15);
-    // To finish the fetching process if we maxed out the number of pages
+
     if (page !== totalPages) {
       showLoadMoreButton();
     } else if (page === totalPages) {
@@ -91,6 +90,8 @@ export async function onLoadMoreBtnClick() {
         position: 'bottomRight',
       });
       hideLoadMoreButton();
+      hideLoader();
+      return;
     }
 
     hideLoader();
