@@ -37,10 +37,12 @@ export async function onFormSubmit(event) {
     const data = await getImageByQuery(userInput, page);
 
     if (data.hits.length === 0) {
+      hideLoadMoreButton();
       displayError(
         'Sorry, there are no images matching your search query. Please try again'
       );
-      hideLoadMoreButton();
+      hideLoader();
+      return;
     }
 
     totalPages = Math.ceil(data.totalHits / 15); //Calculating total pages for this search
